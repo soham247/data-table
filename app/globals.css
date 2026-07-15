@@ -1,0 +1,81 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", ui-sans-serif, system-ui,
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "SFMono-Regular", ui-monospace, "Cascadia Mono", "Segoe UI Mono", Menlo,
+    Consolas, monospace;
+
+  --color-canvas: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-border: #e3e6eb;
+  --color-border-strong: #cbd0d9;
+  --color-ink: #10131a;
+  --color-ink-muted: #5b616e;
+  --color-ink-faint: #8a90a0;
+
+  --color-accent: #3d5afe;
+  --color-accent-hover: #2f45d8;
+  --color-accent-soft: #eef1ff;
+  --color-accent-soft-strong: #dde3ff;
+
+  --color-success: #12a35d;
+  --color-success-soft: #e6f7ee;
+  --color-warning: #b26a00;
+  --color-warning-soft: #fdf1de;
+  --color-danger: #c53030;
+  --color-danger-soft: #fbeaea;
+  --color-neutral-soft: #eef0f3;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: var(--color-accent-soft-strong);
+}
+
+/* Scrollbar styling tuned for a dense data-grid feel */
+.grid-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+.grid-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.grid-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border-strong);
+  border-radius: 999px;
+  border: 2px solid var(--color-surface);
+}
+.grid-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-faint);
+}
+
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-down {
+  animation: slide-down 0.16s ease-out;
+}
