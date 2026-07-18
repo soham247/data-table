@@ -6,11 +6,13 @@ import {
   type ColumnOrderState,
   type ColumnPinningState,
   type ColumnSizingState,
+  type ExpandedState,
   type RowSelectionState,
   type SortingState,
   type VisibilityState,
   flexRender,
   getCoreRowModel,
+  getExpandedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useVirtualizer } from "@tanstack/react-virtual";
@@ -64,6 +66,10 @@ export function DataTable<TData>({
   enableSorting = true,
   sorting: controlledSorting,
   onSortingChange,
+  enableExpanding = false,
+  getSubRows,
+  expanded: controlledExpanded,
+  onExpandedChange,
   defaultColumnPinning,
   pinnedRightGuard,
   rowHeight = DEFAULT_ROW_HEIGHT,
@@ -82,11 +88,14 @@ export function DataTable<TData>({
   // ----- Fallback uncontrolled state for selection & sorting -----
   const [internalRowSelection, setInternalRowSelection] = useState<RowSelectionState>({});
   const [internalSorting, setInternalSorting] = useState<SortingState>([]);
+  const [internalExpanded, setInternalExpanded] = useState<ExpandedState>({});
 
   const rowSelection = controlledRowSelection ?? internalRowSelection;
   const setRowSelection = onRowSelectionChange ?? setInternalRowSelection;
   const sorting = controlledSorting ?? internalSorting;
   const setSorting = onSortingChange ?? setInternalSorting;
+  const expanded = controlledExpanded ?? internalExpanded;
+  const setExpanded = onExpandedChange ?? setInternalExpanded;
 
   // ----- Pinning normalization -----
   const normalizeColumnPinning = useCallback(
@@ -157,7 +166,15 @@ export function DataTable<TData>({
   const table = useReactTable({
     data,
     columns,
-    state: { rowSelection, columnOrder, columnSizing, columnPinning, columnVisibility, sorting },
+    state: {
+      rowSelection,
+      columnOrder,
+      columnSizing,
+      columnPinning,
+      columnVisibility,
+      sorting,
+      ...(enableExpanding ? { expanded } : {}),
+    },
     getRowId,
     onRowSelectionChange: setRowSelection,
     onColumnOrderChange: setColumnOrder,
@@ -171,11 +188,21 @@ export function DataTable<TData>({
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
     enableRowSelection,
+    enableSubRowSelection: enableExpanding,
     enableColumnResizing: true,
     enableSorting,
     columnResizeMode: "onChange",
     getCoreRowModel: getCoreRowModel(),
     manualSorting: true,
+    // Expanding
+    ...(enableExpanding
+      ? {
+          enableExpanding: true,
+          getSubRows,
+          onExpandedChange: setExpanded,
+          getExpandedRowModel: getExpandedRowModel(),
+        }
+      : {}),
   });
 
   const { rows } = table.getRowModel();
@@ -281,7 +308,8 @@ export function DataTable<TData>({
                     ref={rowVirtualizer.measureElement}
                     className={cn(
                       "flex w-fit min-w-full border-b border-border transition-colors",
-                      isSelected ? "bg-accent-soft" : "bg-surface hover:bg-canvas"
+                      isSelected ? "bg-accent-soft" : "bg-surface hover:bg-canvas",
+                      enableExpanding && row.depth > 0 && "bg-canvas/50"
                     )}
                     style={{ height: `${rowHeight}px` }}
                   >

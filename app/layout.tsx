@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Providers } from "./providers";
+import { Navbar } from "./_components/navbar";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -10,9 +11,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body>
-        <Providers>{children}</Providers>
+      <body className="flex flex-col">
+        <Navbar />
+        <Providers>
+          <div className="min-h-0 flex-1">{children}</div>
+        </Providers>
       </body>
     </html>
   );
 }
+

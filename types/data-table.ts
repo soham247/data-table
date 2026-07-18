@@ -1,6 +1,7 @@
 import type {
   ColumnDef,
   ColumnPinningState,
+  ExpandedState,
   OnChangeFn,
   RowSelectionState,
   SortingState,
@@ -35,6 +36,16 @@ export interface DataTableProps<TData> {
   enableSorting?: boolean;
   sorting?: SortingState;
   onSortingChange?: OnChangeFn<SortingState>;
+
+  // === Row expanding / sub-rows (optional) ===
+  /** Enable expand/collapse for rows that have children. Defaults to false. */
+  enableExpanding?: boolean;
+  /** Return child rows for a given row. TanStack default key is `subRows`. */
+  getSubRows?: (row: TData) => TData[] | undefined;
+  /** Controlled expanded state. Leave undefined for uncontrolled. */
+  expanded?: ExpandedState;
+  /** Callback when expanded state changes. */
+  onExpandedChange?: OnChangeFn<ExpandedState>;
 
   // === Column pinning ===
   /** Initial column pinning state (e.g. `{ left: ["select"], right: ["actions"] }`). */

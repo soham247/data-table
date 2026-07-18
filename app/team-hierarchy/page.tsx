@@ -1,10 +1,10 @@
-import { EmployeeDataTable } from "./_components/data-table";
+import { ManagerDataTable } from "./_components/data-table";
 
-export default function Home() {
+export default function TeamHierarchyPage() {
   return (
     <main className="flex h-full flex-col gap-4 p-4 sm:p-6">
       <div className="min-h-0 flex-1">
-        <EmployeeDataTable />
+        <ManagerDataTable />
       </div>
     </main>
   );
